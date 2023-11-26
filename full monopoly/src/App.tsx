@@ -15,6 +15,7 @@ import {
   check_row_and_col,
   handleDiceClick,
   find_index,
+  buyable,
 } from "./tools/tile_helper";
 
 //var num_rolled = 0;
@@ -24,9 +25,11 @@ function App() {
   var card_position = ["30%", "30%", "40%", "40%"];
   var central_pop_up_position = ["40%", "40%", "20%", "20%"];
 
+  const [owned_properties, set_owned_properties] = useState([]);
+  const [buy_button_bool, set_buy_button_bool] = useState(false);
   const [player_money, set_player_money] = useState(1500);
   const [enemy_money, set_enemy_money] = useState(1500);
-
+  const [turn_number, set_turn_number] = useState(0);
   const [num_rolled, set_num_rolled] = useState(0);
   const [current_player_pos, set_current_player_pos] = useState(0);
   const [display_roll_pop_up, set_display_roll_pop_up] = useState("none");
@@ -38,6 +41,11 @@ function App() {
   const [card_landed_on_body, set_card_landed_on_body] = useState(
     "  nooooot   set  :(  "
   );
+
+  const handlebuybutton = () => {
+    // ownedproperties.push(this property)
+    // setplayermoney(playermoney - price)
+  };
 
   const handleCardClose = () => {
     set_display_card("none");
@@ -58,13 +66,16 @@ function App() {
       display_dice_txt,
       new_player_pos_txt,
       num_rolled,
-    } = handleDiceClick(current_player_pos);
+      new_turn_counter,
+      buyable_bool,
+    } = handleDiceClick(current_player_pos, turn_number);
     set_num_rolled(num_rolled);
     set_display_roll_pop_up(display_roll_pop_up_txt);
     set_display_dice(display_dice_txt);
     set_current_player_pos(new_player_pos_txt);
+    set_turn_number(new_turn_counter);
     var pos = find_index(new_player_pos_txt);
-
+    set_buy_button_bool(buyable_bool);
     set_card_landed_on_body(positions[pos[0]][pos[1]][1]);
     set_card_landed_on_headline(positions[pos[0]][pos[1]][0]);
     console.log(" yaaaaaayyy  1");
@@ -86,6 +97,8 @@ function App() {
         image_url={""}
         visible={display_card}
         closeclick={handleCardClose}
+        buyclick={handlebuybutton}
+        buy_button_bool={buy_button_bool}
       />
 
       <RollPopUp
@@ -132,7 +145,11 @@ function App() {
       </div>
 
       <div>
-        <Infoarea player_money={player_money} enemy_money={enemy_money} />
+        <Infoarea
+          player_money={player_money}
+          enemy_money={enemy_money}
+          turn_number={turn_number}
+        />
       </div>
     </div>
   );

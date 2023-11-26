@@ -10,6 +10,8 @@ interface Props {
   image_url: string;
   visible: string;
   closeclick: () => void;
+  buyclick: () => void;
+  buy_button_bool: boolean;
 }
 
 const card = ({
@@ -22,6 +24,8 @@ const card = ({
   image_url,
   visible,
   closeclick,
+  buyclick,
+  buy_button_bool,
 }: Props) => {
   return (
     <div
@@ -38,7 +42,11 @@ const card = ({
       <div className="card-body">
         <h5 className="card-title">{headline}</h5>
         <p className="card-text">{body_text}</p>
-
+        {buy_button_bool && (
+          <button type="button" aria-label="buy" onClick={buyclick}>
+            buy
+          </button>
+        )}
         <button
           type="button"
           className="btn-close"

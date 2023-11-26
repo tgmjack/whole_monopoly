@@ -1,6 +1,46 @@
 import React from 'react'
 
 
+
+const buyable = [
+  [
+    0,1,0,1,1,1,1,1,1,1,0
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+  [
+    0,0,0,0,0,0,0,0,0,0,0
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,0
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,0
+  ],
+  [
+    1,0,0,0,0,0,0,0,0,0,1
+  ],
+  [
+     0,1,1,0,1,1,0,1,0,1,0
+  ],
+];
+
+
+
 const positions = [
     [
       ["free parking ", ""],
@@ -323,7 +363,7 @@ const positions = [
   };
 
 
-  const handleDiceClick = (current_player_pos: number) => {
+  const handleDiceClick = (current_player_pos: number, current_turn_counter: number) => {
     var num_rolled = Math.floor(Math.random() * 6) + 1;
 //    var new_player_pos_txt = 999
     console.log(current_player_pos , num_rolled);    
@@ -331,11 +371,14 @@ const positions = [
 
     var display_roll_pop_up_txt = ("block");
     var display_dice_txt = ("none");
+    var new_turn_counter = current_turn_counter+1;
+    var buyable_bool = false
+    var pos = find_index(new_player_pos_txt)
+    if (buyable[pos[0]][pos[1]] == 1){buyable_bool = true}
 
-
-    return {display_roll_pop_up_txt , display_dice_txt , new_player_pos_txt,num_rolled}
+    return {display_roll_pop_up_txt , display_dice_txt , new_player_pos_txt,num_rolled , new_turn_counter, buyable_bool}
   };
 
 
 
-export {positions, card_index_helper , check_row_and_col , handleDiceClick , find_index}
+export {positions, card_index_helper , check_row_and_col , handleDiceClick , find_index, buyable}

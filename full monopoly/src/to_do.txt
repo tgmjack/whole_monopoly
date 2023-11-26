@@ -3,4 +3,4 @@ b) buy stuff function needs finishing off
 c) property owned list
 d) looping map seems to break rolling
 e) pass go collect money
-f)
+f) double dice

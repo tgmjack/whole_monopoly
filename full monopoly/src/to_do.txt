@@ -1,0 +1,4 @@
+mi to do 
+1) dice roll pop up (check)
+2) fix dimension for all devices  (once small enough switch % to rem)
+3) card pop up when clicked on () 

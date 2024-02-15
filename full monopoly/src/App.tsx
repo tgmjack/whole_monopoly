@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import BoardTile from "./components/board_tile";
 import Infoarea from "./components/infoarea";
+import OwnedProperties from "./components/owned_properties_display";
 import Dice from "./components/dice";
 import PlayerCounter from "./components/player_counter";
 import RollPopUp from "./components/roll_pop_up";
@@ -16,6 +17,11 @@ import {
   handleDiceClick,
   find_index,
   buyable,
+  get_current_card_name_and_price,
+  get_these_property_names,
+  get_these_property_colours,
+  get_colour_of_card,
+  get_svg_on_board_tile,
 } from "./tools/tile_helper";
 
 //var num_rolled = 0;
@@ -25,7 +31,8 @@ function App() {
   var card_position = ["30%", "30%", "40%", "40%"];
   var central_pop_up_position = ["40%", "40%", "20%", "20%"];
 
-  const [owned_properties, set_owned_properties] = useState([]);
+  const [owned_properties, set_owned_properties] = useState<number[]>([]);
+  const [enemy_properties, set_enemy_owned_properties] = useState<number[]>([]);
   const [buy_button_bool, set_buy_button_bool] = useState(false);
   const [player_money, set_player_money] = useState(1500);
   const [enemy_money, set_enemy_money] = useState(1500);
@@ -43,8 +50,15 @@ function App() {
   );
 
   const handlebuybutton = () => {
-    // ownedproperties.push(this property)
-    // setplayermoney(playermoney - price)
+    const { name, price } = get_current_card_name_and_price(current_player_pos);
+    var properties = owned_properties;
+    properties.push(current_player_pos);
+    set_owned_properties(properties);
+    console.log("buying");
+    console.log(owned_properties);
+    var new_money = player_money - price;
+    set_player_money(new_money);
+    handleCardClose();
   };
 
   const handleCardClose = () => {
@@ -68,6 +82,7 @@ function App() {
       num_rolled,
       new_turn_counter,
       buyable_bool,
+      passed_go,
     } = handleDiceClick(current_player_pos, turn_number);
     set_num_rolled(num_rolled);
     set_display_roll_pop_up(display_roll_pop_up_txt);
@@ -78,6 +93,9 @@ function App() {
     set_buy_button_bool(buyable_bool);
     set_card_landed_on_body(positions[pos[0]][pos[1]][1]);
     set_card_landed_on_headline(positions[pos[0]][pos[1]][0]);
+    if (passed_go) {
+      set_player_money(player_money + 200);
+    }
     console.log(" yaaaaaayyy  1");
     setTimeout(() => {
       set_display_card("block");
@@ -128,8 +146,14 @@ function App() {
                       extra_text={col[1]}
                       thisindex={
                         rowindex.toString() + "," + colindex.toString()
-                      } //{rowindex} //.toString()+","+colindex.toString()}
+                      }
                       theimage_path={testImage}
+                      hexcolour={get_colour_of_card(
+                        rowindex.toString() + "," + colindex.toString()
+                      )}
+                      svgs={get_svg_on_board_tile(
+                        rowindex.toString() + "," + colindex.toString()
+                      )}
                     />
                   )}
 
@@ -143,12 +167,25 @@ function App() {
           </div>
         ))}
       </div>
-
+      <br></br>
       <div>
         <Infoarea
           player_money={player_money}
           enemy_money={enemy_money}
           turn_number={turn_number}
+        />
+      </div>
+      <br></br>
+      <div>
+        <OwnedProperties
+          player1_properties_names={get_these_property_names(owned_properties)}
+          player2_properties_names={get_these_property_names(enemy_properties)}
+          player1_properties_colours={get_these_property_colours(
+            owned_properties
+          )}
+          player2_properties_colours={get_these_property_colours(
+            enemy_properties
+          )}
         />
       </div>
     </div>
